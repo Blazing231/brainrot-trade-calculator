@@ -5,41 +5,37 @@
   <style>
     body { background: #111; color: white; font-family: Arial; text-align: center; }
     h1 { color: orange; }
-    .trade-side { border: 2px solid orange; border-radius: 10px; padding: 15px; margin: 20px; display: inline-block; background: rgba(50,0,0,0.6); }
+    .trade-side { border: 2px solid orange; border-radius: 10px; padding: 15px; margin: 20px; display: inline-block; background: rgba(50,0,0,0.6); vertical-align: top; }
     select { margin: 5px; padding: 8px; width: 250px; }
     input { margin: 5px; padding: 8px; width: 230px; }
     button { padding: 10px 20px; margin-top: 15px; font-size: 16px; background-color: orange; border: none; border-radius: 5px; cursor: pointer; }
     button:hover { background-color: darkorange; }
     #result { font-size: 28px; margin-top: 20px; font-weight: bold; }
+    .total { font-size: 18px; margin-top: 10px; }
   </style>
 </head>
 <body>
 
 <h1>🔥 Survive Lava Brainrot Trade Calculator 🔥</h1>
 
-<!-- Your Side -->
 <div class="trade-side">
   <h2>Your Side</h2>
   <input type="text" id="yourSearch" placeholder="Search your Brainrot..." onkeyup="filterBrainrots('yourSide','yourSearch')">
-  <div id="yourSide">
-    <!-- Dropdowns added dynamically -->
-  </div>
+  <div id="yourSide"></div>
+  <div class="total" id="yourTotalDisplay">Total: 0</div>
   <button onclick="addSlot('yourSide')">+ Add Another Brainrot</button>
 </div>
 
-<!-- Their Side -->
 <div class="trade-side">
   <h2>Their Side</h2>
   <input type="text" id="theirSearch" placeholder="Search their Brainrot..." onkeyup="filterBrainrots('theirSide','theirSearch')">
-  <div id="theirSide">
-    <!-- Dropdowns added dynamically -->
-  </div>
+  <div id="theirSide"></div>
+  <div class="total" id="theirTotalDisplay">Total: 0</div>
   <button onclick="addSlot('theirSide')">+ Add Another Brainrot</button>
 </div>
 
 <br>
 <button onclick="checkTrade()">Check Trade</button>
-
 <h2 id="result"></h2>
 
 <script>
@@ -104,12 +100,18 @@ function calculateTotal(sideId){
   return total;
 }
 
+// Update total display
+function updateTotals(){
+  document.getElementById("yourTotalDisplay").innerText = "Total: " + calculateTotal("yourSide");
+  document.getElementById("theirTotalDisplay").innerText = "Total: " + calculateTotal("theirSide");
+}
+
 // Check trade
 function checkTrade(){
+  updateTotals();
   const yourTotal = calculateTotal("yourSide");
   const theirTotal = calculateTotal("theirSide");
 
-  // 10% range for fair
   const lower = theirTotal * 0.9;
   const upper = theirTotal * 1.1;
 
