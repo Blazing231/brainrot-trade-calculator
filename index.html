@@ -1,36 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Survive Lava Brainrot Trade Calculator</title>
+  <title>Brainrot Trade Calculator</title>
   <style>
-    /* FULL ANIMATED BACKGROUND */
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       font-family: Arial, sans-serif;
       text-align: center;
-    }
-
-    body {
-      /* Animated gradient background */
       background: linear-gradient(-45deg, #1f1c2c, #928dab, #1f4037, #99f2c8);
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
       color: white;
     }
-
     @keyframes gradientBG {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
-    h1 {
-      color: #ff9a00;
-      margin-top: 20px;
-      text-shadow: 0 0 8px #ff9a00;
-    }
+    h1 { color: #ff9a00; margin-top: 20px; text-shadow: 0 0 8px #ff9a00; }
 
     .trade-side {
       border: 2px solid #ff9a00;
@@ -43,20 +33,20 @@
       vertical-align: top;
     }
 
-    select { margin: 5px; padding: 8px; width: 160px; border-radius: 5px; border: none; }
+    select, input[type="text"] { margin: 5px; padding: 8px; width: 180px; border-radius: 5px; border: none; }
     label { margin-left: 5px; }
     button { padding: 6px 10px; margin-left: 5px; font-size: 13px; background-color: #ff9a00; border: none; border-radius: 5px; cursor: pointer; color: black; font-weight: bold; }
     button:hover { background-color: #ffaa00; }
 
     .brainrot-container { margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: wrap; }
-    .valueDisplay { color: #ffcc00; font-weight: bold; min-width: 30px; text-align: right; }
+    .valueDisplay { color: #ffcc00; font-weight: bold; min-width: 60px; text-align: right; }
     #result { font-size: 28px; margin-top: 20px; font-weight: bold; text-shadow: 0 0 8px #ff9a00; }
     .total { font-size: 18px; margin-top: 10px; }
   </style>
 </head>
 <body>
 
-<h1>🔥 Survive Lava Brainrot Trade Calculator 🔥</h1>
+<h1>🔥 Brainrot Trade Calculator 🔥</h1>
 
 <div class="trade-side">
   <h2>Your Side</h2>
@@ -77,31 +67,33 @@
 <h2 id="result"></h2>
 
 <script>
-// Brainrots and base points
+// Brainrots with mutation & Moon values in millions
 const brainrots = {
-  "Compactaroni Diskaloni": 1,
-  "Chillin Chili": 2,
-  "Spazio Polare": 3,
-  "Crazylone Pizaione": 4,
-  "Tictac sahur": 5,
-  "67": 6,
-  "Luna spaventosa": 7,
-  "Strawberry Elephant": 8,
-  "Los strawberry elephantitos": 9
+  "Disk": { "Base":4, "Gold":6, "Diamond":8, "Emerald":12, "BloodMoon":16, "Rainbow":40 },
+  "Swag Soda": { "Base":4.5, "Gold":6.75, "Diamond":9, "Emerald":13.5, "BloodMoon":18, "Rainbow":45 },
+  "Chilli": { "Base":5, "Gold":7.5, "Diamond":10, "Emerald":15, "BloodMoon":20, "Rainbow":50 },
+  "Spazio Polare": { "Base":5.5, "Gold":8.25, "Diamond":11, "Emerald":16.5, "BloodMoon":22, "Rainbow":55 },
+  "Pizza": { "Base":6, "Gold":9, "Diamond":12, "Emerald":18, "BloodMoon":24, "Rainbow":60 },
+  "TicTac": { "Base":7, "Gold":10.5, "Diamond":14, "Emerald":21, "BloodMoon":28, "Rainbow":70 },
+  "67": { "Base":8.5, "Gold":12.75, "Diamond":17, "Emerald":25.5, "BloodMoon":34, "Rainbow":85 },
+  "Elephant": { "Base":10, "Gold":15, "Diamond":20, "Emerald":30, "BloodMoon":40, "Rainbow":100 },
+  "Los Elephant": { "Base":15, "Gold":22.5, "Diamond":30, "Emerald":45, "BloodMoon":60, "Rainbow":150 },
+  "Caylus (Stake)": { "Base":30, "Gold":45, "Diamond":60, "Emerald":90, "BloodMoon":120, "Rainbow":300 },
+  "Dragon": { "Base":50, "Gold":75, "Diamond":100, "Emerald":150, "BloodMoon":200, "Rainbow":500 }
 };
 
-// Mutations and multipliers
-const mutations = ["Base","Gold","Diamond","Emerald","Bloodmoon","Rainbow"];
-const mutationMultipliers = {"Base":1,"Gold":1.5,"Diamond":2,"Emerald":3,"Bloodmoon":4,"Rainbow":10};
-
-// Moon trait multiplier
+// Moon trait multiplier (×3)
 const moonMultiplier = 3;
+
+// Mutations array
+const mutations = ["Base","Gold","Diamond","Emerald","BloodMoon","Rainbow"];
 
 // Create Brainrot slot
 function createBrainrotSelect(){
   const container = document.createElement("div");
   container.className = "brainrot-container";
 
+  // Searchable Brainrot dropdown
   const selectBrainrot = document.createElement("select");
   selectBrainrot.className = "brainrot";
   Object.keys(brainrots).forEach(b=>{
@@ -111,6 +103,7 @@ function createBrainrotSelect(){
     selectBrainrot.appendChild(opt);
   });
 
+  // Mutation dropdown
   const selectMutation = document.createElement("select");
   selectMutation.className = "mutation";
   mutations.forEach(m=>{
@@ -120,6 +113,7 @@ function createBrainrotSelect(){
     selectMutation.appendChild(opt);
   });
 
+  // Moon trait checkbox
   const moonCheckbox = document.createElement("input");
   moonCheckbox.type = "checkbox";
   moonCheckbox.className = "moonTrait";
@@ -127,10 +121,12 @@ function createBrainrotSelect(){
   moonLabel.textContent = "Moon ×3";
   moonLabel.appendChild(moonCheckbox);
 
+  // Value display
   const valueDisplay = document.createElement("span");
   valueDisplay.className = "valueDisplay";
-  valueDisplay.textContent = "0";
+  valueDisplay.textContent = "0m";
 
+  // Remove button
   const removeButton = document.createElement("button");
   removeButton.textContent = "Remove";
   removeButton.onclick = () => {
@@ -138,12 +134,14 @@ function createBrainrotSelect(){
     updateTotals();
   };
 
+  // Update value function
   function updateValue(){
-    const base = brainrots[selectBrainrot.value];
-    const mutation = mutationMultipliers[selectMutation.value] || 1;
-    const moon = moonCheckbox.checked ? moonMultiplier : 1;
-    const totalValue = base * mutation * moon;
-    valueDisplay.textContent = totalValue;
+    const brain = selectBrainrot.value;
+    const mutation = selectMutation.value;
+    const baseValue = brainrots[brain][mutation];
+    const moonVal = moonCheckbox.checked ? moonMultiplier : 1;
+    const totalValue = baseValue * moonVal;
+    valueDisplay.textContent = totalValue + "m";
     updateTotals();
   }
 
@@ -164,36 +162,36 @@ function createBrainrotSelect(){
 document.getElementById("yourSide").appendChild(createBrainrotSelect());
 document.getElementById("theirSide").appendChild(createBrainrotSelect());
 
+// Add slot
 function addSlot(sideId){
   document.getElementById(sideId).appendChild(createBrainrotSelect());
 }
 
+// Calculate total
 function calculateTotal(sideId){
   let total = 0;
   const containers = document.getElementById(sideId).querySelectorAll(".brainrot-container");
   containers.forEach(c=>{
     const selectBrainrot = c.querySelector(".brainrot").value;
     const mutation = c.querySelector(".mutation").value;
-    const hasMoon = c.querySelector(".moonTrait").checked;
-    const base = brainrots[selectBrainrot];
-    const mutationVal = mutationMultipliers[mutation] || 1;
-    const moonVal = hasMoon ? moonMultiplier : 1;
-    total += base * mutationVal * moonVal;
+    const moon = c.querySelector(".moonTrait").checked ? moonMultiplier : 1;
+    total += brainrots[selectBrainrot][mutation] * moon;
   });
   return total;
 }
 
+// Update totals
 function updateTotals(){
-  document.getElementById("yourTotalDisplay").innerText = "Total: " + calculateTotal("yourSide");
-  document.getElementById("theirTotalDisplay").innerText = "Total: " + calculateTotal("theirSide");
+  document.getElementById("yourTotalDisplay").innerText = "Total: " + calculateTotal("yourSide") + "m";
+  document.getElementById("theirTotalDisplay").innerText = "Total: " + calculateTotal("theirSide") + "m";
 }
 
+// Check trade logic (your higher = LOSE)
 function checkTrade(){
   updateTotals();
   const yourTotal = calculateTotal("yourSide");
   const theirTotal = calculateTotal("theirSide");
   const el = document.getElementById("result");
-
   if(yourTotal > theirTotal){
     el.innerHTML = "LOSE ❌";
     el.style.color = "red";
