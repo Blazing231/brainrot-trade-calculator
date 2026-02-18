@@ -3,16 +3,47 @@
 <head>
   <title>Survive Lava Brainrot Trade Calculator</title>
   <style>
-    body { background: #111; color: white; font-family: Arial; text-align: center; }
-    h1 { color: orange; }
-    .trade-side { border: 2px solid orange; border-radius: 10px; padding: 15px; margin: 20px; display: inline-block; background: rgba(50,0,0,0.6); vertical-align: top; }
-    select { margin: 5px; padding: 8px; width: 160px; }
+    /* Cool animated gradient background */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: linear-gradient(-45deg, #1f1c2c, #928dab, #1f4037, #99f2c8);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: white;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 { color: #ff9a00; margin-top: 20px; text-shadow: 0 0 8px #ff9a00; }
+
+    /* Trade side styling */
+    .trade-side {
+      border: 2px solid #ff9a00;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px;
+      display: inline-block;
+      background: rgba(0,0,0,0.5);
+      box-shadow: 0 0 15px #ff9a00;
+      vertical-align: top;
+    }
+
+    select { margin: 5px; padding: 8px; width: 160px; border-radius: 5px; border: none; }
     label { margin-left: 5px; }
-    button { padding: 6px 10px; margin-left: 5px; font-size: 13px; background-color: orange; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background-color: darkorange; }
+    button { padding: 6px 10px; margin-left: 5px; font-size: 13px; background-color: #ff9a00; border: none; border-radius: 5px; cursor: pointer; color: black; font-weight: bold; }
+    button:hover { background-color: #ffaa00; }
+
     .brainrot-container { margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: wrap; }
     .valueDisplay { color: #ffcc00; font-weight: bold; min-width: 30px; text-align: right; }
-    #result { font-size: 28px; margin-top: 20px; font-weight: bold; }
+    #result { font-size: 28px; margin-top: 20px; font-weight: bold; text-shadow: 0 0 8px #ff9a00; }
     .total { font-size: 18px; margin-top: 10px; }
   </style>
 </head>
@@ -168,10 +199,10 @@ function checkTrade(){
   const el = document.getElementById("result");
 
   if(yourTotal > theirTotal){
-    el.innerHTML = "LOSE ❌";   // your side higher → lose
+    el.innerHTML = "LOSE ❌";
     el.style.color = "red";
   } else if(yourTotal < theirTotal){
-    el.innerHTML = "WIN ✅";    // your side lower → win
+    el.innerHTML = "WIN ✅";
     el.style.color = "lime";
   } else {
     el.innerHTML = "FAIR 🤝";
