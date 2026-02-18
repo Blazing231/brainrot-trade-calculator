@@ -160,7 +160,7 @@ function updateTotals(){
   document.getElementById("theirTotalDisplay").innerText = "Total: " + calculateTotal("theirSide");
 }
 
-// Check trade (inverted logic: higher your total → LOSE)
+// Check trade (your side higher = LOSE)
 function checkTrade(){
   updateTotals();
   const yourTotal = calculateTotal("yourSide");
@@ -168,10 +168,10 @@ function checkTrade(){
   const el = document.getElementById("result");
 
   if(yourTotal > theirTotal){
-    el.innerHTML = "LOSE ❌";  // flipped
+    el.innerHTML = "LOSE ❌";   // your side higher → lose
     el.style.color = "red";
   } else if(yourTotal < theirTotal){
-    el.innerHTML = "WIN ✅";   // flipped
+    el.innerHTML = "WIN ✅";    // your side lower → win
     el.style.color = "lime";
   } else {
     el.innerHTML = "FAIR 🤝";
