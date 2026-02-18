@@ -38,7 +38,7 @@
 <h2 id="result"></h2>
 
 <script>
-// Brainrots and mutations
+// Brainrots, mutations, and Moon trait
 const brainrots = [
   "Compactaroni Diskaloni",
   "Chillin Chili",
@@ -55,7 +55,7 @@ const mutations = ["Base","Gold","Diamond","Emerald","Bloodmoon","Rainbow"];
 const mutationMultipliers = {"Base":1,"Gold":1.5,"Diamond":2,"Emerald":3,"Bloodmoon":4,"Rainbow":10};
 const moonMultiplier = 3;
 
-// Create a Brainrot container
+// Create a Brainrot slot
 function createBrainrotSelect(){
   const container = document.createElement("div");
   container.className = "brainrot-container";
@@ -88,7 +88,6 @@ function createBrainrotSelect(){
   moonLabel.textContent = "Moon Trait ×3";
   moonLabel.appendChild(moonCheckbox);
 
-  // Append all to container
   container.appendChild(selectBrainrot);
   container.appendChild(selectMutation);
   container.appendChild(moonLabel);
@@ -105,7 +104,7 @@ function addSlot(sideId){
   document.getElementById(sideId).appendChild(createBrainrotSelect());
 }
 
-// Calculate total
+// Calculate total for a side
 function calculateTotal(sideId){
   let total = 0;
   const containers = document.getElementById(sideId).querySelectorAll(".brainrot-container");
@@ -119,29 +118,27 @@ function calculateTotal(sideId){
   return total;
 }
 
-// Update totals
+// Update totals display
 function updateTotals(){
   document.getElementById("yourTotalDisplay").innerText = "Total: " + calculateTotal("yourSide");
   document.getElementById("theirTotalDisplay").innerText = "Total: " + calculateTotal("theirSide");
 }
 
-// Check trade
+// Check trade with correct WIN / LOSE / FAIR
 function checkTrade(){
   updateTotals();
   const yourTotal = calculateTotal("yourSide");
   const theirTotal = calculateTotal("theirSide");
 
-  const lower = theirTotal * 0.9;
-  const upper = theirTotal * 1.1;
-
   const el = document.getElementById("result");
-  if(yourTotal > upper){
+
+  if(yourTotal > theirTotal){
     el.innerHTML = "WIN ✅";
     el.style.color = "lime";
-  } else if(yourTotal < lower){
+  } else if(yourTotal < theirTotal){
     el.innerHTML = "LOSE ❌";
     el.style.color = "red";
-  } else{
+  } else {
     el.innerHTML = "FAIR 🤝";
     el.style.color = "orange";
   }
