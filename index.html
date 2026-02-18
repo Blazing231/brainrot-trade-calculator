@@ -1,66 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Brainrot Trade Calculator</title>
+  <title>Survive Lava For Brainrot Trade Calculator</title>
   <style>
     html, body {
       margin: 0; padding: 0; height: 100%; font-family: Arial; text-align: center;
       background: linear-gradient(-45deg, #1f1c2c, #928dab, #1f4037, #99f2c8);
       background-size: 400% 400%; animation: gradientBG 15s ease infinite; color: white;
-      display: flex; flex-direction: column; justify-content: space-between;
     }
     @keyframes gradientBG {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+
     h1 { color: #ff9a00; text-shadow: 0 0 8px #ff9a00; margin-top: 20px; }
-    .trade-side { display: inline-block; vertical-align: top; margin: 20px; padding: 20px;
-                  border-radius: 15px; border: 2px solid #ff9a00; background: rgba(0,0,0,0.5); }
+    .trade-side {
+      display: inline-block; vertical-align: top; margin: 20px; padding: 20px;
+      border-radius: 15px; border: 2px solid #ff9a00; background: rgba(0,0,0,0.5);
+    }
     select, input[type="checkbox"], button { margin: 5px; padding: 5px; border-radius: 5px; border: none; }
     button { background: #ff9a00; cursor: pointer; font-weight: bold; }
     button:hover { background: #ffaa00; }
     .brainrot-container { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; justify-content: center; margin-bottom: 8px; }
     .valueDisplay { color: #ffcc00; font-weight: bold; min-width: 60px; text-align: right; }
     #result { font-size: 28px; font-weight: bold; margin-top: 20px; text-shadow: 0 0 8px #ff9a00; }
-    /* Footer styling */
-    footer {
-      font-size: 24px;
-      font-weight: bold;
-      color: #ffd700;
-      text-shadow: 0 0 10px #ff7f50, 0 0 20px #ff4500;
-      padding: 20px;
-      background: rgba(0,0,0,0.6);
-    }
+
     hr { border:2px solid #ff9a00; width: 60%; opacity: 0.6; margin: 20px auto; }
-    main { flex: 1; }
   </style>
 </head>
 <body>
 
-<main>
-  <h1>🔥 Brainrot Trade Calculator 🔥</h1>
+<h1>🔥 Survive Lava For Brainrot Trade Calculator 🔥</h1>
 
-  <div class="trade-side">
-    <h2>Your Side</h2>
-    <div id="yourSide"></div>
-    <div id="yourTotalDisplay">Total: 0m</div>
-    <button onclick="addSlot('yourSide')">+ Add Another Brainrot</button>
-  </div>
+<div class="trade-side">
+  <h2>Your Side</h2>
+  <div id="yourSide"></div>
+  <div id="yourTotalDisplay">Total: 0m</div>
+  <button onclick="addSlot('yourSide')">+ Add Another Brainrot</button>
+</div>
 
-  <div class="trade-side">
-    <h2>Their Side</h2>
-    <div id="theirSide"></div>
-    <div id="theirTotalDisplay">Total: 0m</div>
-    <button onclick="addSlot('theirSide')">+ Add Another Brainrot</button>
-  </div>
+<div class="trade-side">
+  <h2>Their Side</h2>
+  <div id="theirSide"></div>
+  <div id="theirTotalDisplay">Total: 0m</div>
+  <button onclick="addSlot('theirSide')">+ Add Another Brainrot</button>
+</div>
 
-  <br>
-  <button onclick="checkTrade()">Check Trade</button>
-  <h2 id="result"></h2>
-</main>
+<br>
+<button onclick="checkTrade()">Check Trade</button>
+<h2 id="result"></h2>
 
-<footer>
+<hr>
+
+<!-- Sticky Footer -->
+<footer style="
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.7);
+  padding: 15px 0;
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 0 0 12px #ff7f50, 0 0 25px #ff4500;
+  z-index: 1000;
+">
   Owner DC: qz94_<br>
   Credits to: Exotic4410
 </footer>
@@ -80,7 +86,6 @@ const brainrots = {
   "Caylus (Stake)": { "Base":30, "Gold":45, "Diamond":60, "Emerald":90, "BloodMoon":120, "Rainbow":300 },
   "Dragon": { "Base":50, "Gold":75, "Diamond":100, "Emerald":150, "BloodMoon":200, "Rainbow":500 }
 };
-
 const mutations = ["Base","Gold","Diamond","Emerald","BloodMoon","Rainbow"];
 const moonMultiplier = 3;
 
