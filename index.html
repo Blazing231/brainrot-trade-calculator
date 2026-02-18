@@ -6,11 +6,12 @@
     body { background: #111; color: white; font-family: Arial; text-align: center; }
     h1 { color: orange; }
     .trade-side { border: 2px solid orange; border-radius: 10px; padding: 15px; margin: 20px; display: inline-block; background: rgba(50,0,0,0.6); vertical-align: top; }
-    select { margin: 5px; padding: 8px; width: 250px; }
+    select { margin: 5px; padding: 8px; width: 200px; }
     button { padding: 10px 20px; margin-top: 15px; font-size: 16px; background-color: orange; border: none; border-radius: 5px; cursor: pointer; }
     button:hover { background-color: darkorange; }
     #result { font-size: 28px; margin-top: 20px; font-weight: bold; }
     .total { font-size: 18px; margin-top: 10px; }
+    .brainrot-container { margin-bottom: 8px; }
   </style>
 </head>
 <body>
@@ -36,7 +37,7 @@
 <h2 id="result"></h2>
 
 <script>
-// Brainrots & mutations
+// Brainrots, mutations, and trait
 const brainrots = [
   "Compactaroni Diskaloni",
   "Chillin Chili",
@@ -49,44 +50,73 @@ const brainrots = [
   "Los strawberry elephantitos"
 ];
 
-const mutations = ["Base","Gold","Diamond","Emerald","Bloodmoon","Rainbow","Moon"];
-const multipliers = {"Base":1,"Gold":1.5,"Diamond":2,"Emerald":3,"Bloodmoon":4,"Rainbow":10,"Moon":3};
+const mutations = ["Base","Gold","Diamond","Emerald","Bloodmoon","Rainbow"];
+const mutationMultipliers = {"Base":1,"Gold":1.5,"Diamond":2,"Emerald":3,"Bloodmoon":4,"Rainbow":10};
 
-// Helper: create select element
-function createSelect(){
-  const select = document.createElement("select");
-  select.className = "brainrot";
+const traits = ["None","Moon"];
+const traitMultipliers = {"None":1,"Moon":3};
+
+// Create a Brainrot + Trait container
+function createBrainrotSelect(){
+  const container = document.createElement("div");
+  container.className = "brainrot-container";
+
+  const selectBrainrot = document.createElement("select");
+  selectBrainrot.className = "brainrot";
   brainrots.forEach(b=>{
-    mutations.forEach(m=>{
-      const opt = document.createElement("option");
-      opt.value = `${b}-${m}`;
-      opt.text = `${b} (${m})`;
-      select.appendChild(opt);
-    });
+    const opt = document.createElement("option");
+    opt.value = b;
+    opt.text = b;
+    selectBrainrot.appendChild(opt);
   });
-  return select;
+
+  const selectMutation = document.createElement("select");
+  selectMutation.className = "mutation";
+  mutations.forEach(m=>{
+    const opt = document.createElement("option");
+    opt.value = m;
+    opt.text = m;
+    selectMutation.appendChild(opt);
+  });
+
+  const selectTrait = document.createElement("select");
+  selectTrait.className = "trait";
+  traits.forEach(t=>{
+    const opt = document.createElement("option");
+    opt.value = t;
+    opt.text = t;
+    selectTrait.appendChild(opt);
+  });
+
+  container.appendChild(selectBrainrot);
+  container.appendChild(selectMutation);
+  container.appendChild(selectTrait);
+
+  return container;
 }
 
-// Initialize first dropdown for each side
-document.getElementById("yourSide").appendChild(createSelect());
-document.getElementById("theirSide").appendChild(createSelect());
+// Initialize first slot
+document.getElementById("yourSide").appendChild(createBrainrotSelect());
+document.getElementById("theirSide").appendChild(createBrainrotSelect());
 
-// Add another Brainrot slot
+// Add another slot
 function addSlot(sideId){
-  document.getElementById(sideId).appendChild(createSelect());
+  document.getElementById(sideId).appendChild(createBrainrotSelect());
 }
 
-// Calculate total for a side
+// Calculate total
 function calculateTotal(sideId){
   let total = 0;
-  document.getElementById(sideId).querySelectorAll(".brainrot").forEach(select=>{
-    const [name,mutation] = select.value.split("-");
-    total += multipliers[mutation] || 1;
+  const containers = document.getElementById(sideId).querySelectorAll(".brainrot-container");
+  containers.forEach(c=>{
+    const mutation = c.querySelector(".mutation").value;
+    const trait = c.querySelector(".trait").value;
+    total += (mutationMultipliers[mutation] || 1) * (traitMultipliers[trait] || 1);
   });
   return total;
 }
 
-// Update total display
+// Update totals
 function updateTotals(){
   document.getElementById("yourTotalDisplay").innerText = "Total: " + calculateTotal("yourSide");
   document.getElementById("theirTotalDisplay").innerText = "Total: " + calculateTotal("theirSide");
