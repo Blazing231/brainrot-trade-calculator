@@ -1,28 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Brainrot Trade Calculator</title>
+  <title>Survive Lava Brainrot Trade Checker</title>
   <style>
     body { background: #111; color: white; font-family: Arial; text-align: center; }
     h1 { color: orange; }
     .trade-side { border: 2px solid orange; border-radius: 10px; padding: 15px; margin: 20px; display: inline-block; background: rgba(50,0,0,0.6); }
-    select { margin: 5px; padding: 8px; width: 200px; }
-    button { padding: 10px 20px; margin-top: 15px; font-size: 16px; background-color: orange; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background-color: darkorange; }
-    #result { font-size: 28px; margin-top: 20px; font-weight: bold; }
-  </style>
-</head>
-<body>
-
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Brainrot Trade Checker</title>
-  <style>
-    body { background: #111; color: white; font-family: Arial; text-align: center; }
-    h1 { color: orange; }
-    .trade-side { border: 2px solid orange; border-radius: 10px; padding: 15px; margin: 20px; display: inline-block; background: rgba(50,0,0,0.6); }
-    select { margin: 5px; padding: 8px; width: 220px; }
+    select { margin: 5px; padding: 8px; width: 250px; }
     button { padding: 10px 20px; margin-top: 15px; font-size: 16px; background-color: orange; border: none; border-radius: 5px; cursor: pointer; }
     button:hover { background-color: darkorange; }
     #result { font-size: 28px; margin-top: 20px; font-weight: bold; }
@@ -104,34 +88,41 @@
 <script>
 // Custom Win/Fair/Lose rules
 const tradeRules = {
-  // Example rules — adjust as needed
   "Compactaroni Diskaloni-Base|Compactaroni Diskaloni-Rainbow": "WIN ✅",
   "Compactaroni Diskaloni-Rainbow|Compactaroni Diskaloni-Base": "LOSE ❌",
+
   "Chillin Chili-Base|Chillin Chili-Rainbow": "WIN ✅",
   "Chillin Chili-Rainbow|Chillin Chili-Base": "LOSE ❌",
+
   "Spazio Polare-Base|Spazio Polare-Rainbow": "WIN ✅",
   "Spazio Polare-Rainbow|Spazio Polare-Base": "LOSE ❌",
+
   "Crazylone Pizaione-Base|Crazylone Pizaione-Rainbow": "WIN ✅",
   "Crazylone Pizaione-Rainbow|Crazylone Pizaione-Base": "LOSE ❌",
+
   "Tictac sahur-Base|Tictac sahur-Rainbow": "WIN ✅",
   "Tictac sahur-Rainbow|Tictac sahur-Base": "LOSE ❌",
+
   "67-Base|67-Rainbow": "WIN ✅",
   "67-Rainbow|67-Base": "LOSE ❌",
+
   "Luna spaventosa-Base|Luna spaventosa-Rainbow": "WIN ✅",
   "Luna spaventosa-Rainbow|Luna spaventosa-Base": "LOSE ❌",
+
   "Strawberry Elephant-Base|Strawberry Elephant-Rainbow": "WIN ✅",
   "Strawberry Elephant-Rainbow|Strawberry Elephant-Base": "LOSE ❌",
+
   "Los strawberry elephantitos-Base|Los strawberry elephantitos-Rainbow": "WIN ✅",
   "Los strawberry elephantitos-Rainbow|Los strawberry elephantitos-Base": "LOSE ❌",
-  // Default for everything else
+  // Everything else defaults to FAIR
 };
 
 function checkTrade(){
-  const your = document.getElementById("yourBrainrot").value;
-  const their = document.getElementById("theirBrainrot").value;
-  const key = your + "|" + their;
+  let your = document.getElementById("yourBrainrot").value.trim();
+  let their = document.getElementById("theirBrainrot").value.trim();
 
-  const result = tradeRules[key] || "FAIR 🤝";
+  let key = your + "|" + their;
+  let result = tradeRules[key] || "FAIR 🤝";
 
   const el = document.getElementById("result");
   el.innerHTML = result;
