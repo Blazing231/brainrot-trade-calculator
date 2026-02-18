@@ -57,4 +57,74 @@
     <option value="Chillin Chili-Base">Chillin Chili (Base)</option>
     <option value="Chillin Chili-Rainbow">Chillin Chili (Rainbow)</option>
 
-    <option value="Spazio Polare-Base">Spazio Polare (Base)</o
+    <option value="Spazio Polare-Base">Spazio Polare (Base)</option>
+    <option value="Spazio Polare-Rainbow">Spazio Polare (Rainbow)</option>
+
+    <option value="Crazylone Pizaione-Base">Crazylone Pizaione (Base)</option>
+    <option value="Crazylone Pizaione-Rainbow">Crazylone Pizaione (Rainbow)</option>
+
+    <option value="Tictac sahur-Base">Tictac sahur (Base)</option>
+    <option value="Tictac sahur-Rainbow">Tictac sahur (Rainbow)</option>
+
+    <option value="67-Base">67 (Base)</option>
+    <option value="67-Rainbow">67 (Rainbow)</option>
+
+    <option value="Luna spaventosa-Base">Luna spaventosa (Base)</option>
+    <option value="Luna spaventosa-Rainbow">Luna spaventosa (Rainbow)</option>
+
+    <option value="Strawberry Elephant-Base">Strawberry Elephant (Base)</option>
+    <option value="Strawberry Elephant-Rainbow">Strawberry Elephant (Rainbow)</option>
+
+    <option value="Los strawberry elephantitos-Base">Los strawberry elephantitos (Base)</option>
+    <option value="Los strawberry elephantitos-Rainbow">Los strawberry elephantitos (Rainbow)</option>
+  </select>
+</div>
+
+<br>
+<button onclick="checkTrade()">Check Trade</button>
+
+<h2 id="result"></h2>
+
+<script>
+// Custom Win/Fair/Lose rules
+const tradeRules = {
+  // Example rules — adjust as needed
+  "Compactaroni Diskaloni-Base|Compactaroni Diskaloni-Rainbow": "WIN ✅",
+  "Compactaroni Diskaloni-Rainbow|Compactaroni Diskaloni-Base": "LOSE ❌",
+  "Chillin Chili-Base|Chillin Chili-Rainbow": "WIN ✅",
+  "Chillin Chili-Rainbow|Chillin Chili-Base": "LOSE ❌",
+  "Spazio Polare-Base|Spazio Polare-Rainbow": "WIN ✅",
+  "Spazio Polare-Rainbow|Spazio Polare-Base": "LOSE ❌",
+  "Crazylone Pizaione-Base|Crazylone Pizaione-Rainbow": "WIN ✅",
+  "Crazylone Pizaione-Rainbow|Crazylone Pizaione-Base": "LOSE ❌",
+  "Tictac sahur-Base|Tictac sahur-Rainbow": "WIN ✅",
+  "Tictac sahur-Rainbow|Tictac sahur-Base": "LOSE ❌",
+  "67-Base|67-Rainbow": "WIN ✅",
+  "67-Rainbow|67-Base": "LOSE ❌",
+  "Luna spaventosa-Base|Luna spaventosa-Rainbow": "WIN ✅",
+  "Luna spaventosa-Rainbow|Luna spaventosa-Base": "LOSE ❌",
+  "Strawberry Elephant-Base|Strawberry Elephant-Rainbow": "WIN ✅",
+  "Strawberry Elephant-Rainbow|Strawberry Elephant-Base": "LOSE ❌",
+  "Los strawberry elephantitos-Base|Los strawberry elephantitos-Rainbow": "WIN ✅",
+  "Los strawberry elephantitos-Rainbow|Los strawberry elephantitos-Base": "LOSE ❌",
+  // Default for everything else
+};
+
+function checkTrade(){
+  const your = document.getElementById("yourBrainrot").value;
+  const their = document.getElementById("theirBrainrot").value;
+  const key = your + "|" + their;
+
+  const result = tradeRules[key] || "FAIR 🤝";
+
+  const el = document.getElementById("result");
+  el.innerHTML = result;
+
+  if(result.includes("WIN")) el.style.color = "lime";
+  else if(result.includes("LOSE")) el.style.color = "red";
+  else el.style.color = "orange";
+}
+</script>
+
+</body>
+</html>
