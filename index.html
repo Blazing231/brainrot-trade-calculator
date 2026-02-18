@@ -8,12 +8,12 @@
     .trade-side { border: 2px solid orange; border-radius: 10px; padding: 15px; margin: 20px; display: inline-block; background: rgba(50,0,0,0.6); vertical-align: top; }
     select { margin: 5px; padding: 8px; width: 180px; }
     label { margin-left: 5px; }
-    button { padding: 10px 20px; margin-top: 15px; font-size: 16px; background-color: orange; border: none; border-radius: 5px; cursor: pointer; }
+    button { padding: 8px 15px; margin-left: 5px; font-size: 14px; background-color: orange; border: none; border-radius: 5px; cursor: pointer; }
     button:hover { background-color: darkorange; }
+    .valueDisplay { color: #ffcc00; margin-left: 8px; font-weight: bold; }
+    .brainrot-container { margin-bottom: 8px; }
     #result { font-size: 28px; margin-top: 20px; font-weight: bold; }
     .total { font-size: 18px; margin-top: 10px; }
-    .brainrot-container { margin-bottom: 8px; }
-    .valueDisplay { color: #ffcc00; margin-left: 8px; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -39,7 +39,7 @@
 <h2 id="result"></h2>
 
 <script>
-// Brainrots, base points
+// Brainrots and base points
 const brainrots = {
   "Compactaroni Diskaloni": 1,
   "Chillin Chili": 2,
@@ -52,7 +52,7 @@ const brainrots = {
   "Los strawberry elephantitos": 9
 };
 
-// Mutations
+// Mutations and multipliers
 const mutations = ["Base","Gold","Diamond","Emerald","Bloodmoon","Rainbow"];
 const mutationMultipliers = {"Base":1,"Gold":1.5,"Diamond":2,"Emerald":3,"Bloodmoon":4,"Rainbow":10};
 
@@ -97,7 +97,15 @@ function createBrainrotSelect(){
   valueDisplay.className = "valueDisplay";
   valueDisplay.textContent = "0";
 
-  // Update value when selections change
+  // Remove button
+  const removeButton = document.createElement("button");
+  removeButton.textContent = "Remove";
+  removeButton.onclick = () => {
+    container.remove();
+    updateTotals();
+  };
+
+  // Update value on change
   function updateValue(){
     const base = brainrots[selectBrainrot.value];
     const mutation = mutationMultipliers[selectMutation.value] || 1;
@@ -115,6 +123,7 @@ function createBrainrotSelect(){
   container.appendChild(selectMutation);
   container.appendChild(moonLabel);
   container.appendChild(valueDisplay);
+  container.appendChild(removeButton);
 
   return container;
 }
