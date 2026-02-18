@@ -33,8 +33,8 @@
       vertical-align: top;
     }
 
-    select, input[type="text"] { margin: 5px; padding: 8px; width: 180px; border-radius: 5px; border: none; }
-    label { margin-left: 5px; }
+    input, select { margin: 5px; padding: 8px; border-radius: 5px; border: none; }
+    input.searchInput { width: 180px; }
     button { padding: 6px 10px; margin-left: 5px; font-size: 13px; background-color: #ff9a00; border: none; border-radius: 5px; cursor: pointer; color: black; font-weight: bold; }
     button:hover { background-color: #ffaa00; }
 
@@ -51,14 +51,14 @@
 <div class="trade-side">
   <h2>Your Side</h2>
   <div id="yourSide"></div>
-  <div class="total" id="yourTotalDisplay">Total: 0</div>
+  <div class="total" id="yourTotalDisplay">Total: 0m</div>
   <button onclick="addSlot('yourSide')">+ Add Another Brainrot</button>
 </div>
 
 <div class="trade-side">
   <h2>Their Side</h2>
   <div id="theirSide"></div>
-  <div class="total" id="theirTotalDisplay">Total: 0</div>
+  <div class="total" id="theirTotalDisplay">Total: 0m</div>
   <button onclick="addSlot('theirSide')">+ Add Another Brainrot</button>
 </div>
 
@@ -82,18 +82,20 @@ const brainrots = {
   "Dragon": { "Base":50, "Gold":75, "Diamond":100, "Emerald":150, "BloodMoon":200, "Rainbow":500 }
 };
 
-// Moon trait multiplier (×3)
+const mutations = ["Base","Gold","Diamond","Emerald","BloodMoon","Rainbow"];
 const moonMultiplier = 3;
 
-// Mutations array
-const mutations = ["Base","Gold","Diamond","Emerald","BloodMoon","Rainbow"];
-
-// Create Brainrot slot
+// Create Brainrot slot with live search
 function createBrainrotSelect(){
   const container = document.createElement("div");
   container.className = "brainrot-container";
 
-  // Searchable Brainrot dropdown
+  // Search input
+  const searchInput = document.createElement("input");
+  searchInput.placeholder = "Search Brainrot...";
+  searchInput.className = "searchInput";
+
+  // Brainrot select (full list)
   const selectBrainrot = document.createElement("select");
   selectBrainrot.className = "brainrot";
   Object.keys(brainrots).forEach(b=>{
@@ -103,7 +105,17 @@ function createBrainrotSelect(){
     selectBrainrot.appendChild(opt);
   });
 
-  // Mutation dropdown
+  // Filter as user types
+  searchInput.addEventListener("input", () => {
+    const filter = searchInput.value.toLowerCase();
+    const options = selectBrainrot.options;
+    for(let i=0;i<options.length;i++){
+      const txt = options[i].text.toLowerCase();
+      options[i].style.display = txt.includes(filter) ? "" : "none";
+    }
+  });
+
+  // Mutation select
   const selectMutation = document.createElement("select");
   selectMutation.className = "mutation";
   mutations.forEach(m=>{
@@ -113,7 +125,7 @@ function createBrainrotSelect(){
     selectMutation.appendChild(opt);
   });
 
-  // Moon trait checkbox
+  // Moon trait
   const moonCheckbox = document.createElement("input");
   moonCheckbox.type = "checkbox";
   moonCheckbox.className = "moonTrait";
@@ -134,14 +146,12 @@ function createBrainrotSelect(){
     updateTotals();
   };
 
-  // Update value function
   function updateValue(){
     const brain = selectBrainrot.value;
     const mutation = selectMutation.value;
     const baseValue = brainrots[brain][mutation];
     const moonVal = moonCheckbox.checked ? moonMultiplier : 1;
-    const totalValue = baseValue * moonVal;
-    valueDisplay.textContent = totalValue + "m";
+    valueDisplay.textContent = (baseValue * moonVal) + "m";
     updateTotals();
   }
 
@@ -149,6 +159,7 @@ function createBrainrotSelect(){
   selectMutation.onchange = updateValue;
   moonCheckbox.onchange = updateValue;
 
+  container.appendChild(searchInput);
   container.appendChild(selectBrainrot);
   container.appendChild(selectMutation);
   container.appendChild(moonLabel);
@@ -172,10 +183,10 @@ function calculateTotal(sideId){
   let total = 0;
   const containers = document.getElementById(sideId).querySelectorAll(".brainrot-container");
   containers.forEach(c=>{
-    const selectBrainrot = c.querySelector(".brainrot").value;
+    const brain = c.querySelector(".brainrot").value;
     const mutation = c.querySelector(".mutation").value;
     const moon = c.querySelector(".moonTrait").checked ? moonMultiplier : 1;
-    total += brainrots[selectBrainrot][mutation] * moon;
+    total += brainrots[brain][mutation] * moon;
   });
   return total;
 }
