@@ -3,10 +3,11 @@
 <head>
   <title>Brainrot Trade Calculator</title>
   <style>
-    body {
-      margin: 0; padding: 0; font-family: Arial; text-align: center;
+    html, body {
+      margin: 0; padding: 0; height: 100%; font-family: Arial; text-align: center;
       background: linear-gradient(-45deg, #1f1c2c, #928dab, #1f4037, #99f2c8);
       background-size: 400% 400%; animation: gradientBG 15s ease infinite; color: white;
+      display: flex; flex-direction: column; justify-content: space-between;
     }
     @keyframes gradientBG {
       0% { background-position: 0% 50%; }
@@ -22,31 +23,50 @@
     .brainrot-container { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; justify-content: center; margin-bottom: 8px; }
     .valueDisplay { color: #ffcc00; font-weight: bold; min-width: 60px; text-align: right; }
     #result { font-size: 28px; font-weight: bold; margin-top: 20px; text-shadow: 0 0 8px #ff9a00; }
+    /* Footer styling */
+    footer {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 0 0 10px #ff7f50, 0 0 20px #ff4500;
+      padding: 20px;
+      background: rgba(0,0,0,0.6);
+    }
+    hr { border:2px solid #ff9a00; width: 60%; opacity: 0.6; margin: 20px auto; }
+    main { flex: 1; }
   </style>
 </head>
 <body>
 
-<h1>🔥 Brainrot Trade Calculator 🔥</h1>
+<main>
+  <h1>🔥 Brainrot Trade Calculator 🔥</h1>
 
-<div class="trade-side">
-  <h2>Your Side</h2>
-  <div id="yourSide"></div>
-  <div id="yourTotalDisplay">Total: 0m</div>
-  <button onclick="addSlot('yourSide')">+ Add Another Brainrot</button>
-</div>
+  <div class="trade-side">
+    <h2>Your Side</h2>
+    <div id="yourSide"></div>
+    <div id="yourTotalDisplay">Total: 0m</div>
+    <button onclick="addSlot('yourSide')">+ Add Another Brainrot</button>
+  </div>
 
-<div class="trade-side">
-  <h2>Their Side</h2>
-  <div id="theirSide"></div>
-  <div id="theirTotalDisplay">Total: 0m</div>
-  <button onclick="addSlot('theirSide')">+ Add Another Brainrot</button>
-</div>
+  <div class="trade-side">
+    <h2>Their Side</h2>
+    <div id="theirSide"></div>
+    <div id="theirTotalDisplay">Total: 0m</div>
+    <button onclick="addSlot('theirSide')">+ Add Another Brainrot</button>
+  </div>
 
-<br>
-<button onclick="checkTrade()">Check Trade</button>
-<h2 id="result"></h2>
+  <br>
+  <button onclick="checkTrade()">Check Trade</button>
+  <h2 id="result"></h2>
+</main>
+
+<footer>
+  Owner DC: qz94_<br>
+  Credits to: Exotic4410
+</footer>
 
 <script>
+// Brainrot values
 const brainrots = {
   "Disk": { "Base":4, "Gold":6, "Diamond":8, "Emerald":12, "BloodMoon":16, "Rainbow":40 },
   "Swag Soda": { "Base":4.5, "Gold":6.75, "Diamond":9, "Emerald":13.5, "BloodMoon":18, "Rainbow":45 },
@@ -60,9 +80,11 @@ const brainrots = {
   "Caylus (Stake)": { "Base":30, "Gold":45, "Diamond":60, "Emerald":90, "BloodMoon":120, "Rainbow":300 },
   "Dragon": { "Base":50, "Gold":75, "Diamond":100, "Emerald":150, "BloodMoon":200, "Rainbow":500 }
 };
+
 const mutations = ["Base","Gold","Diamond","Emerald","BloodMoon","Rainbow"];
 const moonMultiplier = 3;
 
+// Create Brainrot slot
 function createBrainrotSlot(){
   const container = document.createElement("div");
   container.className = "brainrot-container";
