@@ -30,7 +30,7 @@
 </head>
 <body>
 
-<h1>🔥 Survive Lava Brainrot Trade Checker 🔥</h1>
+<h1>🔥 Survive Lava For Brainrot Trade Checker 🔥</h1>
 
 <div class="side">
   <h2>Your Side</h2>
@@ -76,7 +76,20 @@ function checkTrade() {
     document.getElementById("result").innerHTML = "FAIR 🤝";
   }
 }
-</script>
+</script>function checkTrade() {
+  let A = parseFloat(document.querySelector(".brainrotA").value);
+  let B = parseFloat(document.querySelector(".brainrotB").value);
+
+  // Add a multiplier or threshold if needed
+  if (A >= B * 0.1) {  // Example threshold
+    document.getElementById("result").innerHTML = "WIN ✅";
+  } else if (A < B * 0.1) {
+    document.getElementById("result").innerHTML = "LOSE ❌";
+  } else {
+    document.getElementById("result").innerHTML = "FAIR 🤝";
+  }
+}
+
 
 </body>
 </html>
