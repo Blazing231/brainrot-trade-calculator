@@ -3,44 +3,25 @@
 <head>
   <title>Brainrot Trade Calculator</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: Arial, sans-serif;
-      text-align: center;
+    body {
+      margin: 0; padding: 0; font-family: Arial; text-align: center;
       background: linear-gradient(-45deg, #1f1c2c, #928dab, #1f4037, #99f2c8);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      color: white;
+      background-size: 400% 400%; animation: gradientBG 15s ease infinite; color: white;
     }
     @keyframes gradientBG {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
-    h1 { color: #ff9a00; margin-top: 20px; text-shadow: 0 0 8px #ff9a00; }
-
-    .trade-side {
-      border: 2px solid #ff9a00;
-      border-radius: 15px;
-      padding: 20px;
-      margin: 20px;
-      display: inline-block;
-      background: rgba(0,0,0,0.5);
-      box-shadow: 0 0 15px #ff9a00;
-      vertical-align: top;
-    }
-
-    select, input { margin: 5px; padding: 8px; border-radius: 5px; border: none; }
-    button { padding: 6px 10px; margin-left: 5px; font-size: 13px; background-color: #ff9a00; border: none; border-radius: 5px; cursor: pointer; color: black; font-weight: bold; }
-    button:hover { background-color: #ffaa00; }
-
-    .brainrot-container { margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: wrap; }
+    h1 { color: #ff9a00; text-shadow: 0 0 8px #ff9a00; margin-top: 20px; }
+    .trade-side { display: inline-block; vertical-align: top; margin: 20px; padding: 20px;
+                  border-radius: 15px; border: 2px solid #ff9a00; background: rgba(0,0,0,0.5); }
+    select, input[type="checkbox"], button { margin: 5px; padding: 5px; border-radius: 5px; border: none; }
+    button { background: #ff9a00; cursor: pointer; font-weight: bold; }
+    button:hover { background: #ffaa00; }
+    .brainrot-container { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; justify-content: center; margin-bottom: 8px; }
     .valueDisplay { color: #ffcc00; font-weight: bold; min-width: 60px; text-align: right; }
-    #result { font-size: 28px; margin-top: 20px; font-weight: bold; text-shadow: 0 0 8px #ff9a00; }
-    .total { font-size: 18px; margin-top: 10px; }
+    #result { font-size: 28px; font-weight: bold; margin-top: 20px; text-shadow: 0 0 8px #ff9a00; }
   </style>
 </head>
 <body>
@@ -50,14 +31,14 @@
 <div class="trade-side">
   <h2>Your Side</h2>
   <div id="yourSide"></div>
-  <div class="total" id="yourTotalDisplay">Total: 0m</div>
+  <div id="yourTotalDisplay">Total: 0m</div>
   <button onclick="addSlot('yourSide')">+ Add Another Brainrot</button>
 </div>
 
 <div class="trade-side">
   <h2>Their Side</h2>
   <div id="theirSide"></div>
-  <div class="total" id="theirTotalDisplay">Total: 0m</div>
+  <div id="theirTotalDisplay">Total: 0m</div>
   <button onclick="addSlot('theirSide')">+ Add Another Brainrot</button>
 </div>
 
@@ -66,7 +47,6 @@
 <h2 id="result"></h2>
 
 <script>
-// Brainrots with correct values
 const brainrots = {
   "Disk": { "Base":4, "Gold":6, "Diamond":8, "Emerald":12, "BloodMoon":16, "Rainbow":40 },
   "Swag Soda": { "Base":4.5, "Gold":6.75, "Diamond":9, "Emerald":13.5, "BloodMoon":18, "Rainbow":45 },
@@ -80,63 +60,44 @@ const brainrots = {
   "Caylus (Stake)": { "Base":30, "Gold":45, "Diamond":60, "Emerald":90, "BloodMoon":120, "Rainbow":300 },
   "Dragon": { "Base":50, "Gold":75, "Diamond":100, "Emerald":150, "BloodMoon":200, "Rainbow":500 }
 };
-
 const mutations = ["Base","Gold","Diamond","Emerald","BloodMoon","Rainbow"];
 const moonMultiplier = 3;
 
-// Create Brainrot slot without any search input
-function createBrainrotSelect(){
+function createBrainrotSlot(){
   const container = document.createElement("div");
   container.className = "brainrot-container";
 
-  // Brainrot dropdown only
   const selectBrainrot = document.createElement("select");
-  selectBrainrot.className = "brainrot";
-  Object.keys(brainrots).forEach(b=>{
+  Object.keys(brainrots).forEach(b => {
     const opt = document.createElement("option");
-    opt.value = b;
-    opt.text = b;
+    opt.value = b; opt.text = b;
     selectBrainrot.appendChild(opt);
   });
 
-  // Mutation select
   const selectMutation = document.createElement("select");
-  selectMutation.className = "mutation";
-  mutations.forEach(m=>{
+  mutations.forEach(m => {
     const opt = document.createElement("option");
-    opt.value = m;
-    opt.text = m;
+    opt.value = m; opt.text = m;
     selectMutation.appendChild(opt);
   });
 
-  // Moon trait
   const moonCheckbox = document.createElement("input");
   moonCheckbox.type = "checkbox";
-  moonCheckbox.className = "moonTrait";
   const moonLabel = document.createElement("label");
-  moonLabel.textContent = "Moon ×3";
-  moonLabel.appendChild(moonCheckbox);
+  moonLabel.textContent = "Moon ×3"; moonLabel.appendChild(moonCheckbox);
 
-  // Value display
   const valueDisplay = document.createElement("span");
-  valueDisplay.className = "valueDisplay";
-  valueDisplay.textContent = "0m";
+  valueDisplay.className = "valueDisplay"; valueDisplay.textContent = "0m";
 
-  // Remove button
-  const removeButton = document.createElement("button");
-  removeButton.textContent = "Remove";
-  removeButton.onclick = () => {
-    container.remove();
-    updateTotals();
-  };
+  const removeBtn = document.createElement("button");
+  removeBtn.textContent = "Remove";
+  removeBtn.onclick = () => { container.remove(); updateTotals(); };
 
-  // Update value function
   function updateValue(){
     const brain = selectBrainrot.value;
     const mutation = selectMutation.value;
-    const baseValue = brainrots[brain][mutation];
-    const moonVal = moonCheckbox.checked ? moonMultiplier : 1;
-    valueDisplay.textContent = (baseValue * moonVal) + "m";
+    const val = brainrots[brain][mutation] * (moonCheckbox.checked ? moonMultiplier : 1);
+    valueDisplay.textContent = val + "m";
     updateTotals();
   }
 
@@ -148,55 +109,43 @@ function createBrainrotSelect(){
   container.appendChild(selectMutation);
   container.appendChild(moonLabel);
   container.appendChild(valueDisplay);
-  container.appendChild(removeButton);
+  container.appendChild(removeBtn);
 
   return container;
 }
 
-// Initialize first slot for both sides
-document.getElementById("yourSide").appendChild(createBrainrotSelect());
-document.getElementById("theirSide").appendChild(createBrainrotSelect());
+// Initial slots
+document.getElementById("yourSide").appendChild(createBrainrotSlot());
+document.getElementById("theirSide").appendChild(createBrainrotSlot());
 
-// Add slot
 function addSlot(sideId){
-  document.getElementById(sideId).appendChild(createBrainrotSelect());
+  document.getElementById(sideId).appendChild(createBrainrotSlot());
 }
 
-// Calculate total
 function calculateTotal(sideId){
   let total = 0;
-  const containers = document.getElementById(sideId).querySelectorAll(".brainrot-container");
-  containers.forEach(c=>{
-    const brain = c.querySelector(".brainrot").value;
-    const mutation = c.querySelector(".mutation").value;
-    const moon = c.querySelector(".moonTrait").checked ? moonMultiplier : 1;
+  document.getElementById(sideId).querySelectorAll(".brainrot-container").forEach(c=>{
+    const brain = c.querySelector("select").value;
+    const mutation = c.querySelectorAll("select")[1].value;
+    const moon = c.querySelector("input").checked ? moonMultiplier : 1;
     total += brainrots[brain][mutation] * moon;
   });
   return total;
 }
 
-// Update totals
 function updateTotals(){
   document.getElementById("yourTotalDisplay").innerText = "Total: " + calculateTotal("yourSide") + "m";
   document.getElementById("theirTotalDisplay").innerText = "Total: " + calculateTotal("theirSide") + "m";
 }
 
-// Check trade logic (your higher = LOSE)
 function checkTrade(){
   updateTotals();
   const yourTotal = calculateTotal("yourSide");
   const theirTotal = calculateTotal("theirSide");
-  const el = document.getElementById("result");
-  if(yourTotal > theirTotal){
-    el.innerHTML = "LOSE ❌";
-    el.style.color = "red";
-  } else if(yourTotal < theirTotal){
-    el.innerHTML = "WIN ✅";
-    el.style.color = "lime";
-  } else {
-    el.innerHTML = "FAIR 🤝";
-    el.style.color = "orange";
-  }
+  const result = document.getElementById("result");
+  if(yourTotal > theirTotal){ result.innerText="LOSE ❌"; result.style.color="red"; }
+  else if(yourTotal < theirTotal){ result.innerText="WIN ✅"; result.style.color="lime"; }
+  else{ result.innerText="FAIR 🤝"; result.style.color="orange"; }
 }
 </script>
 
