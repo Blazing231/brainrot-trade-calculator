@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Brainrot Trade Calculator</title>
+  <title>Survive Lava Brainrot Trade Checker</title>
   <style>
     body {
       background: linear-gradient(#111, #330000);
@@ -55,13 +55,13 @@
   <h2>Your Side</h2>
   <div id="yourSide">
     <select class="brainrot">
-      <option value="4">Disk (Base)</option>
-      <option value="6">Disk (Gold)</option>
-      <option value="8">Disk (Diamond)</option>
-      <option value="12">Disk (Emerald)</option>
-      <option value="16">Disk (Bloodmoon)</option>
-      <option value="40">Disk (Rainbow)</option>
-      <!-- Add other Brainrots here with their values -->
+      <option value="Disk-Base">Disk (Base)</option>
+      <option value="Disk-Gold">Disk (Gold)</option>
+      <option value="Disk-Diamond">Disk (Diamond)</option>
+      <option value="Disk-Emerald">Disk (Emerald)</option>
+      <option value="Disk-Bloodmoon">Disk (Bloodmoon)</option>
+      <option value="Disk-Rainbow">Disk (Rainbow)</option>
+      <!-- Add other Brainrots here -->
     </select>
   </div>
   <button onclick="addSlot('yourSide')">+ Add Another Brainrot</button>
@@ -71,13 +71,13 @@
   <h2>Their Side</h2>
   <div id="theirSide">
     <select class="brainrot">
-      <option value="4">Disk (Base)</option>
-      <option value="6">Disk (Gold)</option>
-      <option value="8">Disk (Diamond)</option>
-      <option value="12">Disk (Emerald)</option>
-      <option value="16">Disk (Bloodmoon)</option>
-      <option value="40">Disk (Rainbow)</option>
-      <!-- Add other Brainrots here with their values -->
+      <option value="Disk-Base">Disk (Base)</option>
+      <option value="Disk-Gold">Disk (Gold)</option>
+      <option value="Disk-Diamond">Disk (Diamond)</option>
+      <option value="Disk-Emerald">Disk (Emerald)</option>
+      <option value="Disk-Bloodmoon">Disk (Bloodmoon)</option>
+      <option value="Disk-Rainbow">Disk (Rainbow)</option>
+      <!-- Add other Brainrots here -->
     </select>
   </div>
   <button onclick="addSlot('theirSide')">+ Add Another Brainrot</button>
@@ -89,40 +89,53 @@
 <h2 id="result"></h2>
 
 <script>
+// 1️⃣ Add new slot dynamically
 function addSlot(sideId){
   const container = document.getElementById(sideId);
   const newSelect = container.children[0].cloneNode(true); // clone first dropdown
   container.appendChild(newSelect);
 }
 
-function totalValue(sideId){
-  let total = 0;
-  document.getElementById(sideId).querySelectorAll(".brainrot").forEach(select => {
-    total += parseFloat(select.value);
-  });
-  return total;
-}
+// 2️⃣ Custom Win/Lose rules table
+const tradeRules = {
+  "Disk-Base|Disk-Rainbow": "WIN ✅",
+  "Disk-Base|Disk-Bloodmoon": "FAIR 🤝",
+  "Disk-Base|Disk-Emerald": "FAIR 🤝",
+  "Disk-Base|Disk-Diamond": "FAIR 🤝",
+  "Disk-Base|Disk-Gold": "FAIR 🤝",
+  "Disk-Base|Disk-Base": "FAIR 🤝",
 
+  "Disk-Rainbow|Disk-Base": "LOSE ❌",
+  "Disk-Rainbow|Disk-Rainbow": "FAIR 🤝",
+  "Disk-Rainbow|Disk-Bloodmoon": "WIN ✅",
+  // Add all other combinations for your full chart here
+};
+
+// 3️⃣ Calculate total Win/Fair/Lose
 function checkTrade(){
-  let yourTotal = totalValue("yourSide");
-  let theirTotal = totalValue("theirSide");
+  const yourBrainrots = Array.from(document.getElementById("yourSide").querySelectorAll(".brainrot")).map(x=>x.value);
+  const theirBrainrots = Array.from(document.getElementById("theirSide").querySelectorAll(".brainrot")).map(x=>x.value);
 
-  // Optional: add 10% fairness threshold
-  const lowerThreshold = theirTotal * 0.9;
-  const upperThreshold = theirTotal * 1.1;
+  let resultCounts = { "WIN ✅":0, "FAIR 🤝":0, "LOSE ❌":0 };
 
-  if(yourTotal > upperThreshold){
-    document.getElementById("result").innerHTML = "WIN ✅";
-    document.getElementById("result").style.color = "lime";
-  }
-  else if(yourTotal < lowerThreshold){
-    document.getElementById("result").innerHTML = "LOSE ❌";
-    document.getElementById("result").style.color = "red";
-  }
-  else{
-    document.getElementById("result").innerHTML = "FAIR 🤝";
-    document.getElementById("result").style.color = "orange";
-  }
+  // Compare each of your Brainrots to each of their Brainrots
+  yourBrainrots.forEach(y=>{
+    theirBrainrots.forEach(t=>{
+      const key = y + "|" + t;
+      const r = tradeRules[key] || "FAIR 🤝";
+      resultCounts[r]++;
+    });
+  });
+
+  // Decide final result (majority)
+  let finalResult = Object.keys(resultCounts).reduce((a,b)=> resultCounts[a] > resultCounts[b] ? a : b);
+
+  const resultElement = document.getElementById("result");
+  resultElement.innerHTML = finalResult;
+
+  if(finalResult.includes("WIN")) resultElement.style.color = "lime";
+  else if(finalResult.includes("LOSE")) resultElement.style.color = "red";
+  else resultElement.style.color = "orange";
 }
 </script>
 
