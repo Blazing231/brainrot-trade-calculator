@@ -84,12 +84,12 @@ const brainrots = {
 const mutations = ["Base","Gold","Diamond","Emerald","BloodMoon","Rainbow"];
 const moonMultiplier = 3;
 
-// Create Brainrot slot (no search)
+// Create Brainrot slot without any search input
 function createBrainrotSelect(){
   const container = document.createElement("div");
   container.className = "brainrot-container";
 
-  // Brainrot dropdown
+  // Brainrot dropdown only
   const selectBrainrot = document.createElement("select");
   selectBrainrot.className = "brainrot";
   Object.keys(brainrots).forEach(b=>{
@@ -130,6 +130,7 @@ function createBrainrotSelect(){
     updateTotals();
   };
 
+  // Update value function
   function updateValue(){
     const brain = selectBrainrot.value;
     const mutation = selectMutation.value;
