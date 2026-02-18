@@ -38,7 +38,7 @@
 <h2 id="result"></h2>
 
 <script>
-// Brainrots, mutations, and Moon trait
+// Brainrots, mutations, Moon trait
 const brainrots = [
   "Compactaroni Diskaloni",
   "Chillin Chili",
@@ -55,12 +55,11 @@ const mutations = ["Base","Gold","Diamond","Emerald","Bloodmoon","Rainbow"];
 const mutationMultipliers = {"Base":1,"Gold":1.5,"Diamond":2,"Emerald":3,"Bloodmoon":4,"Rainbow":10};
 const moonMultiplier = 3;
 
-// Create a Brainrot slot
+// Create Brainrot slot
 function createBrainrotSelect(){
   const container = document.createElement("div");
   container.className = "brainrot-container";
 
-  // Brainrot dropdown
   const selectBrainrot = document.createElement("select");
   selectBrainrot.className = "brainrot";
   brainrots.forEach(b=>{
@@ -70,7 +69,6 @@ function createBrainrotSelect(){
     selectBrainrot.appendChild(opt);
   });
 
-  // Mutation dropdown
   const selectMutation = document.createElement("select");
   selectMutation.className = "mutation";
   mutations.forEach(m=>{
@@ -80,7 +78,6 @@ function createBrainrotSelect(){
     selectMutation.appendChild(opt);
   });
 
-  // Moon trait checkbox
   const moonCheckbox = document.createElement("input");
   moonCheckbox.type = "checkbox";
   moonCheckbox.className = "moonTrait";
@@ -118,19 +115,22 @@ function calculateTotal(sideId){
   return total;
 }
 
-// Update totals display
+// Update totals
 function updateTotals(){
-  document.getElementById("yourTotalDisplay").innerText = "Total: " + calculateTotal("yourSide");
-  document.getElementById("theirTotalDisplay").innerText = "Total: " + calculateTotal("theirSide");
+  const yourTotal = calculateTotal("yourSide");
+  const theirTotal = calculateTotal("theirSide");
+  document.getElementById("yourTotalDisplay").innerText = "Total: " + yourTotal;
+  document.getElementById("theirTotalDisplay").innerText = "Total: " + theirTotal;
 }
 
-// Check trade with correct WIN / LOSE / FAIR
+// Check trade
 function checkTrade(){
   updateTotals();
   const yourTotal = calculateTotal("yourSide");
   const theirTotal = calculateTotal("theirSide");
-
   const el = document.getElementById("result");
+
+  console.log("DEBUG: Your total =", yourTotal, "Their total =", theirTotal);
 
   if(yourTotal > theirTotal){
     el.innerHTML = "WIN ✅";
