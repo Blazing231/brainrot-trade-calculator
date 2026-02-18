@@ -7,7 +7,6 @@
     h1 { color: orange; }
     .trade-side { border: 2px solid orange; border-radius: 10px; padding: 15px; margin: 20px; display: inline-block; background: rgba(50,0,0,0.6); vertical-align: top; }
     select { margin: 5px; padding: 8px; width: 250px; }
-    input { margin: 5px; padding: 8px; width: 230px; }
     button { padding: 10px 20px; margin-top: 15px; font-size: 16px; background-color: orange; border: none; border-radius: 5px; cursor: pointer; }
     button:hover { background-color: darkorange; }
     #result { font-size: 28px; margin-top: 20px; font-weight: bold; }
@@ -20,7 +19,6 @@
 
 <div class="trade-side">
   <h2>Your Side</h2>
-  <input type="text" id="yourSearch" placeholder="Search your Brainrot..." onkeyup="filterBrainrots('yourSide','yourSearch')">
   <div id="yourSide"></div>
   <div class="total" id="yourTotalDisplay">Total: 0</div>
   <button onclick="addSlot('yourSide')">+ Add Another Brainrot</button>
@@ -28,7 +26,6 @@
 
 <div class="trade-side">
   <h2>Their Side</h2>
-  <input type="text" id="theirSearch" placeholder="Search their Brainrot..." onkeyup="filterBrainrots('theirSide','theirSearch')">
   <div id="theirSide"></div>
   <div class="total" id="theirTotalDisplay">Total: 0</div>
   <button onclick="addSlot('theirSide')">+ Add Another Brainrot</button>
@@ -52,8 +49,8 @@ const brainrots = [
   "Los strawberry elephantitos"
 ];
 
-const mutations = ["Base","Gold","Diamond","Emerald","Bloodmoon","Rainbow"];
-const multipliers = {"Base":1,"Gold":1.5,"Diamond":2,"Emerald":3,"Bloodmoon":4,"Rainbow":10};
+const mutations = ["Base","Gold","Diamond","Emerald","Bloodmoon","Rainbow","Moon"];
+const multipliers = {"Base":1,"Gold":1.5,"Diamond":2,"Emerald":3,"Bloodmoon":4,"Rainbow":10,"Moon":3};
 
 // Helper: create select element
 function createSelect(){
@@ -77,17 +74,6 @@ document.getElementById("theirSide").appendChild(createSelect());
 // Add another Brainrot slot
 function addSlot(sideId){
   document.getElementById(sideId).appendChild(createSelect());
-}
-
-// Filter Brainrots for search
-function filterBrainrots(sideId,inputId){
-  const filter = document.getElementById(inputId).value.toLowerCase();
-  const selects = document.getElementById(sideId).querySelectorAll("select");
-  selects.forEach(select=>{
-    Array.from(select.options).forEach(opt=>{
-      opt.style.display = opt.text.toLowerCase().includes(filter) ? "" : "none";
-    });
-  });
 }
 
 // Calculate total for a side
