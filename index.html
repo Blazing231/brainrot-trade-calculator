@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Brainrot Trade Calculator</title>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: Arial;
+      text-align: center;
+    }
+
+    select, button {
+      padding: 8px;
+      margin: 5px;
+    }
+
+    .side {
+      border: 1px solid orange;
+      padding: 15px;
+      margin: 20px;
+      display: inline-block;
+      width: 300px;
+    }
+
+    h1 {
+      color: orange;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🔥 Survive Lava Brainrot Trade Checker 🔥</h1>
+
+<div class="side">
+  <h2>Your Side</h2>
+  <select class="brainrotA">
+    <option value="0">Select Brainrot</option>
+    <option value="4">Disk (Base)</option>
+    <option value="6">Disk (Gold)</option>
+    <option value="8">Disk (Diamond)</option>
+    <option value="12">Disk (Emerald)</option>
+    <option value="16">Disk (Bloodmoon)</option>
+    <option value="40">Disk (Rainbow)</option>
+  </select>
+</div>
+
+<div class="side">
+  <h2>Their Side</h2>
+  <select class="brainrotB">
+    <option value="0">Select Brainrot</option>
+    <option value="4">Disk (Base)</option>
+    <option value="6">Disk (Gold)</option>
+    <option value="8">Disk (Diamond)</option>
+    <option value="12">Disk (Emerald)</option>
+    <option value="16">Disk (Bloodmoon)</option>
+    <option value="40">Disk (Rainbow)</option>
+  </select>
+</div>
+
+<br>
+<button onclick="checkTrade()">Check Trade</button>
+
+<h2 id="result"></h2>
+
+<script>
+function checkTrade() {
+  let A = parseFloat(document.querySelector(".brainrotA").value);
+  let B = parseFloat(document.querySelector(".brainrotB").value);
+
+  if (A > B) {
+    document.getElementById("result").innerHTML = "WIN ✅";
+  } else if (A < B) {
+    document.getElementById("result").innerHTML = "LOSE ❌";
+  } else {
+    document.getElementById("result").innerHTML = "FAIR 🤝";
+  }
+}
+</script>
+
+</body>
+</html>
