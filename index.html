@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Survive Lava Brainrot Trade Checker</title>
+  <title>Survive Lava Brainrot Trade Calculator</title>
   <style>
     body { background: #111; color: white; font-family: Arial; text-align: center; }
     h1 { color: orange; }
     .trade-side { border: 2px solid orange; border-radius: 10px; padding: 15px; margin: 20px; display: inline-block; background: rgba(50,0,0,0.6); }
     select { margin: 5px; padding: 8px; width: 250px; }
+    input { margin: 5px; padding: 8px; width: 230px; }
     button { padding: 10px 20px; margin-top: 15px; font-size: 16px; background-color: orange; border: none; border-radius: 5px; cursor: pointer; }
     button:hover { background-color: darkorange; }
     #result { font-size: 28px; margin-top: 20px; font-weight: bold; }
@@ -14,70 +15,26 @@
 </head>
 <body>
 
-<h1>🔥 Survive Lava Brainrot Trade Checker 🔥</h1>
+<h1>🔥 Survive Lava Brainrot Trade Calculator 🔥</h1>
 
+<!-- Your Side -->
 <div class="trade-side">
   <h2>Your Side</h2>
-  <select id="yourBrainrot">
-    <option value="Compactaroni Diskaloni-Base">Compactaroni Diskaloni (Base)</option>
-    <option value="Compactaroni Diskaloni-Rainbow">Compactaroni Diskaloni (Rainbow)</option>
-
-    <option value="Chillin Chili-Base">Chillin Chili (Base)</option>
-    <option value="Chillin Chili-Rainbow">Chillin Chili (Rainbow)</option>
-
-    <option value="Spazio Polare-Base">Spazio Polare (Base)</option>
-    <option value="Spazio Polare-Rainbow">Spazio Polare (Rainbow)</option>
-
-    <option value="Crazylone Pizaione-Base">Crazylone Pizaione (Base)</option>
-    <option value="Crazylone Pizaione-Rainbow">Crazylone Pizaione (Rainbow)</option>
-
-    <option value="Tictac sahur-Base">Tictac sahur (Base)</option>
-    <option value="Tictac sahur-Rainbow">Tictac sahur (Rainbow)</option>
-
-    <option value="67-Base">67 (Base)</option>
-    <option value="67-Rainbow">67 (Rainbow)</option>
-
-    <option value="Luna spaventosa-Base">Luna spaventosa (Base)</option>
-    <option value="Luna spaventosa-Rainbow">Luna spaventosa (Rainbow)</option>
-
-    <option value="Strawberry Elephant-Base">Strawberry Elephant (Base)</option>
-    <option value="Strawberry Elephant-Rainbow">Strawberry Elephant (Rainbow)</option>
-
-    <option value="Los strawberry elephantitos-Base">Los strawberry elephantitos (Base)</option>
-    <option value="Los strawberry elephantitos-Rainbow">Los strawberry elephantitos (Rainbow)</option>
-  </select>
+  <input type="text" id="yourSearch" placeholder="Search your Brainrot..." onkeyup="filterBrainrots('yourSide','yourSearch')">
+  <div id="yourSide">
+    <!-- Dropdowns added dynamically -->
+  </div>
+  <button onclick="addSlot('yourSide')">+ Add Another Brainrot</button>
 </div>
 
+<!-- Their Side -->
 <div class="trade-side">
   <h2>Their Side</h2>
-  <select id="theirBrainrot">
-    <option value="Compactaroni Diskaloni-Base">Compactaroni Diskaloni (Base)</option>
-    <option value="Compactaroni Diskaloni-Rainbow">Compactaroni Diskaloni (Rainbow)</option>
-
-    <option value="Chillin Chili-Base">Chillin Chili (Base)</option>
-    <option value="Chillin Chili-Rainbow">Chillin Chili (Rainbow)</option>
-
-    <option value="Spazio Polare-Base">Spazio Polare (Base)</option>
-    <option value="Spazio Polare-Rainbow">Spazio Polare (Rainbow)</option>
-
-    <option value="Crazylone Pizaione-Base">Crazylone Pizaione (Base)</option>
-    <option value="Crazylone Pizaione-Rainbow">Crazylone Pizaione (Rainbow)</option>
-
-    <option value="Tictac sahur-Base">Tictac sahur (Base)</option>
-    <option value="Tictac sahur-Rainbow">Tictac sahur (Rainbow)</option>
-
-    <option value="67-Base">67 (Base)</option>
-    <option value="67-Rainbow">67 (Rainbow)</option>
-
-    <option value="Luna spaventosa-Base">Luna spaventosa (Base)</option>
-    <option value="Luna spaventosa-Rainbow">Luna spaventosa (Rainbow)</option>
-
-    <option value="Strawberry Elephant-Base">Strawberry Elephant (Base)</option>
-    <option value="Strawberry Elephant-Rainbow">Strawberry Elephant (Rainbow)</option>
-
-    <option value="Los strawberry elephantitos-Base">Los strawberry elephantitos (Base)</option>
-    <option value="Los strawberry elephantitos-Rainbow">Los strawberry elephantitos (Rainbow)</option>
-  </select>
+  <input type="text" id="theirSearch" placeholder="Search their Brainrot..." onkeyup="filterBrainrots('theirSide','theirSearch')">
+  <div id="theirSide">
+    <!-- Dropdowns added dynamically -->
+  </div>
+  <button onclick="addSlot('theirSide')">+ Add Another Brainrot</button>
 </div>
 
 <br>
@@ -86,50 +43,87 @@
 <h2 id="result"></h2>
 
 <script>
-// Custom Win/Fair/Lose rules
-const tradeRules = {
-  "Compactaroni Diskaloni-Base|Compactaroni Diskaloni-Rainbow": "WIN ✅",
-  "Compactaroni Diskaloni-Rainbow|Compactaroni Diskaloni-Base": "LOSE ❌",
+// Brainrots & mutations
+const brainrots = [
+  "Compactaroni Diskaloni",
+  "Chillin Chili",
+  "Spazio Polare",
+  "Crazylone Pizaione",
+  "Tictac sahur",
+  "67",
+  "Luna spaventosa",
+  "Strawberry Elephant",
+  "Los strawberry elephantitos"
+];
 
-  "Chillin Chili-Base|Chillin Chili-Rainbow": "WIN ✅",
-  "Chillin Chili-Rainbow|Chillin Chili-Base": "LOSE ❌",
+const mutations = ["Base","Gold","Diamond","Emerald","Bloodmoon","Rainbow"];
+const multipliers = {"Base":1,"Gold":1.5,"Diamond":2,"Emerald":3,"Bloodmoon":4,"Rainbow":10};
 
-  "Spazio Polare-Base|Spazio Polare-Rainbow": "WIN ✅",
-  "Spazio Polare-Rainbow|Spazio Polare-Base": "LOSE ❌",
+// Helper: create select element
+function createSelect(){
+  const select = document.createElement("select");
+  select.className = "brainrot";
+  brainrots.forEach(b=>{
+    mutations.forEach(m=>{
+      const opt = document.createElement("option");
+      opt.value = `${b}-${m}`;
+      opt.text = `${b} (${m})`;
+      select.appendChild(opt);
+    });
+  });
+  return select;
+}
 
-  "Crazylone Pizaione-Base|Crazylone Pizaione-Rainbow": "WIN ✅",
-  "Crazylone Pizaione-Rainbow|Crazylone Pizaione-Base": "LOSE ❌",
+// Initialize first dropdown for each side
+document.getElementById("yourSide").appendChild(createSelect());
+document.getElementById("theirSide").appendChild(createSelect());
 
-  "Tictac sahur-Base|Tictac sahur-Rainbow": "WIN ✅",
-  "Tictac sahur-Rainbow|Tictac sahur-Base": "LOSE ❌",
+// Add another Brainrot slot
+function addSlot(sideId){
+  document.getElementById(sideId).appendChild(createSelect());
+}
 
-  "67-Base|67-Rainbow": "WIN ✅",
-  "67-Rainbow|67-Base": "LOSE ❌",
+// Filter Brainrots for search
+function filterBrainrots(sideId,inputId){
+  const filter = document.getElementById(inputId).value.toLowerCase();
+  const selects = document.getElementById(sideId).querySelectorAll("select");
+  selects.forEach(select=>{
+    Array.from(select.options).forEach(opt=>{
+      opt.style.display = opt.text.toLowerCase().includes(filter) ? "" : "none";
+    });
+  });
+}
 
-  "Luna spaventosa-Base|Luna spaventosa-Rainbow": "WIN ✅",
-  "Luna spaventosa-Rainbow|Luna spaventosa-Base": "LOSE ❌",
+// Calculate total for a side
+function calculateTotal(sideId){
+  let total = 0;
+  document.getElementById(sideId).querySelectorAll(".brainrot").forEach(select=>{
+    const [name,mutation] = select.value.split("-");
+    total += multipliers[mutation] || 1;
+  });
+  return total;
+}
 
-  "Strawberry Elephant-Base|Strawberry Elephant-Rainbow": "WIN ✅",
-  "Strawberry Elephant-Rainbow|Strawberry Elephant-Base": "LOSE ❌",
-
-  "Los strawberry elephantitos-Base|Los strawberry elephantitos-Rainbow": "WIN ✅",
-  "Los strawberry elephantitos-Rainbow|Los strawberry elephantitos-Base": "LOSE ❌",
-  // Everything else defaults to FAIR
-};
-
+// Check trade
 function checkTrade(){
-  let your = document.getElementById("yourBrainrot").value.trim();
-  let their = document.getElementById("theirBrainrot").value.trim();
+  const yourTotal = calculateTotal("yourSide");
+  const theirTotal = calculateTotal("theirSide");
 
-  let key = your + "|" + their;
-  let result = tradeRules[key] || "FAIR 🤝";
+  // 10% range for fair
+  const lower = theirTotal * 0.9;
+  const upper = theirTotal * 1.1;
 
   const el = document.getElementById("result");
-  el.innerHTML = result;
-
-  if(result.includes("WIN")) el.style.color = "lime";
-  else if(result.includes("LOSE")) el.style.color = "red";
-  else el.style.color = "orange";
+  if(yourTotal > upper){
+    el.innerHTML = "WIN ✅";
+    el.style.color = "lime";
+  } else if(yourTotal < lower){
+    el.innerHTML = "LOSE ❌";
+    el.style.color = "red";
+  } else{
+    el.innerHTML = "FAIR 🤝";
+    el.style.color = "orange";
+  }
 }
 </script>
 
